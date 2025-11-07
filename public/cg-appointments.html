@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Caregiver - Pet Appointments</title>
+  
+</head>
+<style>
+    body{
+        background: url('appointments.jpg') no-repeat center center/cover;
+    }
+
+    nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    z-index: 1000;
+  }
+  
+  /* Left side: Logo and Title */
+  .nav-left {
+    display: flex;
+    align-items: center;
+  }
+  
+  .nav-logo {
+    width: 125px;
+    height: 55px;
+    object-fit: cover;
+    margin-right: 0;
+  }
+  
+  .brand-name {
+    font-size: 40px;
+    font-weight: 700;
+    color: #5baec5;
+  }
+  
+  /* Right side: Links */
+  .nav-right {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-right: 15px;
+  }
+  
+  .nav-right p a {
+    text-decoration: none;
+    color: #333;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* Cool Hover Effect */
+  .nav-right p a::before {
+    content: "";
+    position: absolute;
+    width: 0%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: linear-gradient(to right, #79c2d0, #5baec5);
+    transition: 0.4s ease;
+    z-index: -1;
+    border-radius: 30px;
+  }
+  
+  .nav-right p a:hover::before {
+    width: 100%;
+  }
+  
+  .nav-right p a:hover {
+    color: white;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    nav {
+      flex-direction: column;
+      height: auto;
+      padding: 1rem;
+    }
+  
+    .nav-right {
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+  }
+    #heading{
+        text-align: center;
+        
+         text-align: center;
+        font-weight: bold;
+        font-size: 30px;
+        color: white;
+        margin-bottom: 1.5rem;
+    }
+
+    #apt-wrapper{
+       
+       
+        max-width: 600px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        overflow-y: auto;
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+         margin: 5rem auto 2rem;
+         margin-top: 120px;
+         margin-bottom: 0;
+    }
+</style>
+<body>
+  <nav class="navbar">
+      <div class="nav-left">
+        <img src="logo.png" alt="PetCare Logo" class="nav-logo">
+        <span class="brand-name">PetCare</span>
+      </div>
+      <span class="nav-right">
+        <p><a href="dashboard.html">Home</a></p>
+        <p><a href="allPets.html">Pets</a></p>
+        <p><a href="#">Health Records</a></p>
+      </span>
+    </nav>
+    <div id="apt-wrapper">
+  <h2 id="heading">Appointments</h2>
+  <div id="appointments-container"></div>
+    </div>
+  <script src="cg-appointments.js"></script>
+</body>
+</html>

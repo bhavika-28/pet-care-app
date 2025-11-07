@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetCare - Profile</title>
+    <link rel="stylesheet" href="todo.css">
+</head>
+<body>
+    <div class="bg">
+        <nav class="navbar">
+            <div class="nav-left">
+              <img src="logo.png" alt="PetCare Logo" class="nav-logo">
+              <span class="brand-name">PetCare</span>
+            </div>
+            <span class="nav-right">
+                    <p><a href="dashboard.html">Home</a></p>
+                    <p><a href="todo.html">To-Do</a></p>
+                    <p><a href="appointments.html">Appointments</a></p>
+                    <p><a href="health-records.html">Health-Records</a></p>
+                    <div class="nav-icons-container">
+                        <div class="nav-dropdown">
+                            <div id="pet-icon-nav" class="nav-icon pet-icon" title="Pet Profile">
+                                <span id="pet-emoji-icon">🐾</span>
+                            </div>
+                            <div class="dropdown-menu pet-dropdown">
+                                <a href="pet-info.html" class="dropdown-item">📋 Pet Info</a>
+                                <div class="dropdown-item pet-code-item" onclick="copyPetCode()">
+                                    <span>🔑 Pet Code: <span id="dropdown-pet-code">Loading...</span></span>
+                                    <small>Click to copy</small>
+                                </div>
+                                <div class="dropdown-item pet-switcher-item-header">
+                                    <span>🐾 Other Pet Profiles</span>
+                                </div>
+                                <div id="pet-switcher-list" class="pet-switcher-list">
+                                    <div class="pet-switcher-loading">Loading pets...</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="nav-dropdown">
+                            <div class="nav-icon user-icon active" title="User Profile">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="12" cy="8" r="4" fill="#666"/>
+                                    <path d="M6 20c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="#666" stroke-width="2" fill="none"/>
+                                </svg>
+                            </div>
+                            <div class="dropdown-menu user-dropdown">
+                                <a href="profile.html" class="dropdown-item">👤 User Info</a>
+                                <div class="dropdown-item logout-item" onclick="logout()">🚪 Logout</div>
+                            </div>
+                        </div>
+                    </div>
+            </span>
+          </nav>
+          
+        <main>
+            <div class="health-records-container" style="max-width: 900px;">
+                <h1>Profile Settings</h1>
+                
+                <div class="add-record-form">
+                    <h3 class="form-section-title">Personal Information</h3>
+                    <div class="form-divider"></div>
+                    
+                    <div id="user-info" style="padding: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #e0e0e0;">
+                            <div style="flex: 1;">
+                                <label style="display: block; font-size: 0.85rem; color: #666; margin-bottom: 0.25rem;"><strong>Name</strong></label>
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <input type="text" id="username-input" placeholder="Enter your name" autocomplete="off" value="" style="flex: 1; padding: 0.4rem 0.6rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem; max-width: 250px;">
+                                    <button onclick="updateUsername()" class="submit-btn" style="padding: 0.4rem 0.8rem; font-size: 0.85rem; white-space: nowrap;">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #e0e0e0;">
+                            <label style="display: block; font-size: 0.85rem; color: #666; margin-bottom: 0.25rem;"><strong>Email</strong></label>
+                            <span id="email-display" style="font-size: 0.9rem; color: #333;">Loading...</span>
+                        </div>
+                        
+                        <div style="margin-top: 1rem;">
+                            <h4 style="margin-bottom: 0.75rem; color: #333; font-size: 0.95rem; font-weight: 600;">Pets Owned by You</h4>
+                            <div id="owned-pets-list" style="min-height: 30px;">
+                                <p style="color: #666; font-size: 0.85rem;">Loading...</p>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 1.25rem;">
+                            <h4 style="margin-bottom: 0.75rem; color: #333; font-size: 0.95rem; font-weight: 600;">Pets You Care For</h4>
+                            <div id="caretaker-pets-list" style="min-height: 30px;">
+                                <p style="color: #666; font-size: 0.85rem;">Loading...</p>
+                            </div>
+                            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e0e0e0;">
+                                <label style="display: block; font-size: 0.85rem; color: #666; margin-bottom: 0.5rem; font-weight: 600;">Add Pet Code to Become a Caregiver</label>
+                                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                    <input type="text" id="pet-code-input" placeholder="Enter pet code" style="flex: 1; padding: 0.4rem 0.6rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem; max-width: 250px;" onkeypress="if(event.key === 'Enter') addPetCodeFromProfile()">
+                                    <button onclick="addPetCodeFromProfile()" class="submit-btn" style="padding: 0.4rem 0.8rem; font-size: 0.85rem; white-space: nowrap;">Add Pet Code</button>
+                                </div>
+                                <div id="pet-code-message" style="margin-top: 0.5rem; font-size: 0.8rem;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="add-record-form">
+                    <h3 class="form-section-title">Connected Members</h3>
+                    <div class="form-divider"></div>
+                    
+                    <div id="group-members-list" style="padding: 1rem;">
+                        <p>Loading group members...</p>
+                    </div>
+                </div>
+                
+                <div class="add-record-form">
+                    <h3 class="form-section-title">Settings</h3>
+                    <div class="form-divider"></div>
+                    
+                    <div style="padding: 1rem;">
+                        <div class="form-group" style="margin-bottom: 1.25rem;">
+                            <label style="display: block; font-size: 0.85rem; color: #666; margin-bottom: 0.5rem; font-weight: 600;"><strong>Change Password</strong></label>
+                            
+                            <div style="position: relative; width: 100%; max-width: 350px; margin-bottom: 0.5rem;">
+                                <input type="password" id="current-password" placeholder="Current Password" style="width: 100%; padding: 0.4rem 2.5rem 0.4rem 0.6rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem;">
+                                <button type="button" onclick="togglePassword('current-password', 'toggle-current')" id="toggle-current" style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1rem; color: #666; padding: 0.2rem;">👁️</button>
+                            </div>
+                            
+                            <div style="position: relative; width: 100%; max-width: 350px; margin-bottom: 0.5rem;">
+                                <input type="password" id="new-password" placeholder="New Password" style="width: 100%; padding: 0.4rem 2.5rem 0.4rem 0.6rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem;">
+                                <button type="button" onclick="togglePassword('new-password', 'toggle-new')" id="toggle-new" style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1rem; color: #666; padding: 0.2rem;">👁️</button>
+                            </div>
+                            
+                            <div style="position: relative; width: 100%; max-width: 350px; margin-bottom: 0.5rem;">
+                                <input type="password" id="confirm-password" placeholder="Confirm New Password" style="width: 100%; padding: 0.4rem 2.5rem 0.4rem 0.6rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem;">
+                                <button type="button" onclick="togglePassword('confirm-password', 'toggle-confirm')" id="toggle-confirm" style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1rem; color: #666; padding: 0.2rem;">👁️</button>
+                            </div>
+                            
+                            <button onclick="changePassword()" class="submit-btn" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Change Password</button>
+                            <div id="password-message" style="margin-top: 0.5rem; font-size: 0.85rem;"></div>
+                        </div>
+                        <button onclick="logout()" class="submit-btn" style="background: linear-gradient(135deg, #fc8181 0%, #f56565 100%); padding: 0.5rem 1rem; font-size: 0.9rem;">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Get userId from sessionStorage (tab-specific) first, then localStorage
+            const userId = sessionStorage.getItem('userId') || localStorage.getItem('userId');
+            const nameInput = document.getElementById('username-input');
+            
+            // Fetch user data from database to get the actual username
+            try {
+                const userRes = await fetch(`/api/user/${userId}`);
+                if (userRes.ok) {
+                    const userData = await userRes.json();
+                    if (userData.success && userData.user) {
+                        const dbUsername = userData.user.username;
+                        const dbEmail = userData.user.email;
+                        
+                        // Update localStorage with fresh data from database
+                        localStorage.setItem('email', dbEmail);
+                        if (dbUsername && !dbUsername.includes('@')) {
+                            // Only store username if it's not an email
+                            localStorage.setItem('username', dbUsername);
+                        }
+                        
+                        // Display email
+                        document.getElementById('email-display').textContent = dbEmail || 'N/A';
+                        
+                        // Set name field - only if username exists and is not an email
+                        if (dbUsername && !dbUsername.includes('@')) {
+                            nameInput.value = dbUsername;
+                        } else {
+                            // Username is email or doesn't exist - leave empty
+                            nameInput.value = '';
+                        }
+                    } else {
+                        // Fallback to localStorage if API fails
+                        loadFromLocalStorage();
+                    }
+                } else {
+                    // Fallback to localStorage if API fails
+                    loadFromLocalStorage();
+                }
+            } catch (err) {
+                console.error('Error fetching user data:', err);
+                // Fallback to localStorage if API fails
+                loadFromLocalStorage();
+            }
+            
+            // Function to load from localStorage as fallback
+            function loadFromLocalStorage() {
+                const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+                let userEmail = localStorage.getItem('email');
+                if (!userEmail && currentUser && currentUser.email) {
+                    userEmail = currentUser.email;
+                    localStorage.setItem('email', userEmail);
+                }
+                document.getElementById('email-display').textContent = userEmail || 'N/A';
+                
+                // Clean up localStorage: if username is an email, remove it
+                const storedUsername = localStorage.getItem('username');
+                if (storedUsername && storedUsername.includes('@')) {
+                    localStorage.removeItem('username');
+                    nameInput.value = '';
+                } else if (storedUsername && !storedUsername.includes('@')) {
+                    nameInput.value = storedUsername;
+                } else {
+                    nameInput.value = '';
+                }
+            }
+            
+            // Clear multiple times to override browser autofill/autocomplete (only if empty)
+            setTimeout(() => {
+                if (nameInput.value && nameInput.value.includes('@')) {
+                    nameInput.value = '';
+                    nameInput.removeAttribute('value');
+                }
+            }, 100);
+            
+            // Prevent any value from being set by browser autofill
+            nameInput.addEventListener('focus', function() {
+                if (this.value && this.value.includes('@')) {
+                    this.value = '';
+                    this.removeAttribute('value');
+                }
+            });
+            
+            nameInput.addEventListener('input', function() {
+                // If user types something that looks like an email, warn them
+                if (this.value.includes('@')) {
+                    // Don't prevent typing, but we'll validate on save
+                }
+            });
+            
+            // Load owned pets
+            await loadOwnedPets(userId);
+            
+            // Load caretaker pets
+            await loadCaretakerPets(userId);
+            
+            // Load connected members based on pet relationships
+            await loadConnectedMembers(userId);
+        });
+        
+        async function loadOwnedPets(userId) {
+            try {
+                const res = await fetch(`/api/pets/user?userId=${userId}`);
+                const data = await res.json();
+                const ownedList = document.getElementById('owned-pets-list');
+                
+                if (data.success && data.pets && data.pets.length > 0) {
+                    ownedList.innerHTML = '<ul style="list-style: none; padding: 0; margin: 0;">' + 
+                        data.pets.map(pet => 
+                            `<li style="padding: 0.5rem 0.75rem; border-bottom: 1px solid #e0e0e0; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; font-size: 0.9rem;">
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <span style="font-size: 1.1rem;">${pet.emoji || '🐾'}</span>
+                                    <span style="color: #333;"><strong>${pet.name}</strong> - ${pet.type || 'Unknown'}${pet.breed ? ' (' + pet.breed + ')' : ''}</span>
+                                </div>
+                                <button onclick="removeOwnedPet(${pet.id})" style="padding: 0.25rem 0.5rem; background: #f56565; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Remove</button>
+                             </li>`
+                        ).join('') +
+                        '</ul>';
+                } else {
+                    ownedList.innerHTML = '<p style="color: #666; font-size: 0.85rem; padding: 0.5rem;">No pets owned yet.</p>';
+                }
+            } catch (err) {
+                console.error('Error loading owned pets:', err);
+                document.getElementById('owned-pets-list').innerHTML = '<p style="color: #f56565;">Error loading pets.</p>';
+            }
+        }
+        
+        async function loadCaretakerPets(userId) {
+            try {
+                // Get pets from localStorage first (caregiver pets added via pet codes)
+                const caregiverPets = JSON.parse(sessionStorage.getItem('caregiverPets') || localStorage.getItem('caregiverPets') || '[]');
+                
+                // Migrate caregivers to database if they exist in localStorage
+                if (caregiverPets.length > 0) {
+                    try {
+                        const migrateRes = await fetch('/api/caregiver/migrate', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ userId, petIds: caregiverPets })
+                        });
+                        const migrateData = await migrateRes.json();
+                        if (migrateData.success && migrateData.migrated.length > 0) {
+                            console.log(`✅ Migrated ${migrateData.migrated.length} caregivers to database`);
+                        }
+                    } catch (migrateErr) {
+                        console.error('Error migrating caregivers:', migrateErr);
+                        // Continue anyway
+                    }
+                }
+                
+                // Get pets from both backend API and localStorage
+                const backendRes = await fetch(`/api/pets/caretaker?userId=${userId}`);
+                const backendData = await backendRes.json();
+                const allPetIds = new Set();
+                const allPets = [];
+                
+                // Add backend pets
+                if (backendData.success && backendData.pets && backendData.pets.length > 0) {
+                    backendData.pets.forEach(pet => {
+                        if (!allPetIds.has(pet.id)) {
+                            allPetIds.add(pet.id);
+                            allPets.push(pet);
+                        }
+                    });
+                }
+                
+                // Fetch and add localStorage pets
+                if (caregiverPets.length > 0) {
+                    const localStoragePets = await Promise.all(
+                        caregiverPets.map(petId => 
+                            fetch(`/api/pets/${petId}`)
+                                .then(res => res.json())
+                                .then(data => data.success ? data.pet : null)
+                                .catch(() => null)
+                        )
+                    );
+                    
+                    localStoragePets.forEach(pet => {
+                        if (pet && !allPetIds.has(pet.id)) {
+                            allPetIds.add(pet.id);
+                            allPets.push(pet);
+                        }
+                    });
+                }
+                
+                const caretakerList = document.getElementById('caretaker-pets-list');
+                
+                if (allPets.length > 0) {
+                    caretakerList.innerHTML = '<ul style="list-style: none; padding: 0; margin: 0;">' + 
+                        allPets.map(pet => 
+                            `<li style="padding: 0.5rem 0.75rem; border-bottom: 1px solid #e0e0e0; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; font-size: 0.9rem;">
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <span style="font-size: 1.1rem;">${pet.emoji || '🐾'}</span>
+                                    <span style="color: #333;"><strong>${pet.name}</strong> - ${pet.type || 'Unknown'}${pet.breed ? ' (' + pet.breed + ')' : ''}</span>
+                                </div>
+                                <button onclick="removeCaretakerPet(${pet.id})" style="padding: 0.25rem 0.5rem; background: #f56565; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Remove</button>
+                             </li>`
+                        ).join('') +
+                        '</ul>';
+                } else {
+                    caretakerList.innerHTML = '<p style="color: #666; font-size: 0.85rem; padding: 0.5rem;">You are not a caretaker for any pets yet.</p>';
+                }
+            } catch (err) {
+                console.error('Error loading caretaker pets:', err);
+                document.getElementById('caretaker-pets-list').innerHTML = '<p style="color: #f56565;">Error loading pets.</p>';
+            }
+        }
+        
+        async function loadConnectedMembers(userId) {
+            try {
+                if (!userId) {
+                    console.error('No userId provided');
+                    document.getElementById('group-members-list').innerHTML = '<p style="color: #666; font-size: 0.85rem; padding: 0.5rem;">Please log in to see connected members.</p>';
+                    return;
+                }
+
+                // First, migrate any caregivers from localStorage to database
+                const caregiverPets = JSON.parse(sessionStorage.getItem('caregiverPets') || localStorage.getItem('caregiverPets') || '[]');
+                if (caregiverPets.length > 0) {
+                    try {
+                        const migrateRes = await fetch('/api/caregiver/migrate', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ userId, petIds: caregiverPets })
+                        });
+                        const migrateData = await migrateRes.json();
+                        if (migrateData.success && migrateData.migrated.length > 0) {
+                            console.log(`✅ Migrated ${migrateData.migrated.length} caregivers to database`);
+                        }
+                    } catch (migrateErr) {
+                        console.error('Error migrating caregivers:', migrateErr);
+                        // Continue anyway - might already be in database
+                    }
+                }
+
+                // Get caregiver pet IDs from localStorage
+                const caregiverPetIds = caregiverPets.length > 0 ? caregiverPets.join(',') : '';
+                
+                // Build URL
+                let url = `/api/connected-members?userId=${userId}`;
+                if (caregiverPetIds) {
+                    url += `&caregiverPetIds=${caregiverPetIds}`;
+                }
+                
+                console.log('Fetching connected members:', url);
+                
+                // Fetch connected members
+                const res = await fetch(url);
+                
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    console.error('API error:', res.status, errorText);
+                    throw new Error(`HTTP ${res.status}: ${errorText}`);
+                }
+                
+                const data = await res.json();
+                console.log('Connected members data:', data);
+                
+                const membersList = document.getElementById('group-members-list');
+                
+                if (data.success && data.members && data.members.length > 0) {
+                    membersList.innerHTML = '<ul style="list-style: none; padding: 0; margin: 0;">' + 
+                        data.members.map(member => {
+                            const petNames = member.pets && member.pets.length > 0 
+                                ? member.pets.map(p => `${p.emoji || '🐾'} ${p.name}`).join(', ')
+                                : 'No pets';
+                            return `
+                                <li style="padding: 0.75rem; border-bottom: 1px solid #e0e0e0;">
+                                    <div style="font-weight: 600; color: #333; margin-bottom: 0.25rem;">${member.username || member.email}</div>
+                                    <div style="font-size: 0.8rem; color: #999; font-style: italic;">${petNames}</div>
+                                </li>
+                            `;
+                        }).join('') +
+                        '</ul>';
+                } else {
+                    membersList.innerHTML = '<p style="color: #666; font-size: 0.85rem; padding: 0.5rem;">No connected members yet. Add pet codes to see owners, or create pets to see caregivers.</p>';
+                }
+            } catch (err) {
+                console.error('Error loading connected members:', err);
+                console.error('Error details:', err.message, err.stack);
+                document.getElementById('group-members-list').innerHTML = `<p style="color: #f56565;">Error loading connected members: ${err.message}</p>`;
+            }
+        }
+        
+        async function addPetCodeFromProfile() {
+            const petCodeInput = document.getElementById('pet-code-input');
+            const petCode = petCodeInput.value.trim().toUpperCase();
+            const messageDiv = document.getElementById('pet-code-message');
+            
+            // Clear previous messages
+            messageDiv.textContent = '';
+            messageDiv.style.color = '';
+            
+            if (!petCode) {
+                messageDiv.textContent = 'Please enter a pet code';
+                messageDiv.style.color = '#f56565';
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/pets/code/${petCode}`);
+                const data = await response.json();
+                
+                if (data.success && data.pet) {
+                    const userId = sessionStorage.getItem('userId') || localStorage.getItem('userId');
+                    
+                    // Get existing caregiver pets from sessionStorage first, then localStorage
+                    const caregiverPetsStr = sessionStorage.getItem('caregiverPets') || localStorage.getItem('caregiverPets') || '[]';
+                    const caregiverPets = JSON.parse(caregiverPetsStr);
+                    
+                    // Check if pet is already in the list
+                    if (caregiverPets.includes(data.pet.id)) {
+                        messageDiv.textContent = `You already have access to ${data.pet.name}.`;
+                        messageDiv.style.color = '#f59e0b';
+                        petCodeInput.value = '';
+                        return;
+                    }
+                    
+                    // Add caregiver to database
+                    const addResponse = await fetch('/api/caregiver/add', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ userId, petId: data.pet.id })
+                    });
+                    
+                    const addData = await addResponse.json();
+                    
+                    if (!addData.success) {
+                        messageDiv.textContent = addData.message || 'Failed to add caregiver access.';
+                        messageDiv.style.color = '#f56565';
+                        return;
+                    }
+                    
+                    // Add pet to both storages
+                    caregiverPets.push(data.pet.id);
+                    const petsStr = JSON.stringify(caregiverPets);
+                    sessionStorage.setItem('caregiverPets', petsStr);
+                    localStorage.setItem('caregiverPets', petsStr);
+                    
+                    // Clear input
+                    petCodeInput.value = '';
+                    
+                    // Show success message
+                    messageDiv.textContent = `Successfully added ${data.pet.name}!`;
+                    messageDiv.style.color = '#48bb78';
+                    
+                    // Reload the caretaker pets list and connected members
+                    await loadCaretakerPets(userId);
+                    await loadConnectedMembers(userId);
+                    
+                    // Clear success message after 3 seconds
+                    setTimeout(() => {
+                        messageDiv.textContent = '';
+                    }, 3000);
+                } else {
+                    messageDiv.textContent = data.message || 'Invalid pet code. Please check and try again.';
+                    messageDiv.style.color = '#f56565';
+                }
+            } catch (err) {
+                console.error("Error adding pet code:", err);
+                messageDiv.textContent = 'Error: Could not verify pet code. Please try again.';
+                messageDiv.style.color = '#f56565';
+            }
+        }
+        
+        async function updateUsername() {
+            const userId = sessionStorage.getItem('userId') || localStorage.getItem('userId');
+            const newUsername = document.getElementById('username-input').value.trim();
+            
+            if (!newUsername) {
+                alert('Please enter a name');
+                return;
+            }
+            
+            // Validate that it's not an email address
+            if (newUsername.includes('@')) {
+                alert('Name cannot be an email address. Please enter your actual name.');
+                return;
+            }
+            
+            if (!userId) {
+                alert('User ID not found. Please log in again.');
+                return;
+            }
+            
+            try {
+                // Convert userId to integer if it's a string
+                const userIdInt = parseInt(userId, 10);
+                if (isNaN(userIdInt)) {
+                    alert('Invalid user ID. Please log in again.');
+                    return;
+                }
+                
+                const res = await fetch('/api/username', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: userIdInt, username: newUsername })
+                });
+                
+                // Check if response is ok before parsing JSON
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    let errorData;
+                    try {
+                        errorData = JSON.parse(errorText);
+                    } catch (e) {
+                        errorData = { message: errorText || 'Failed to update name' };
+                    }
+                    console.error('Update failed:', errorData);
+                    alert(errorData.message || 'Failed to update name');
+                    return;
+                }
+                
+                const data = await res.json();
+                
+                if (data.success && data.user) {
+                    // Update localStorage with data from database
+                    localStorage.setItem('username', data.user.username);
+                    localStorage.setItem('email', data.user.email);
+                    
+                    // Update currentUser object if it exists
+                    const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+                    if (currentUser) {
+                        currentUser.username = data.user.username;
+                        currentUser.email = data.user.email;
+                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    }
+                    
+                    // Update the name field with the saved value
+                    document.getElementById('username-input').value = data.user.username;
+                    
+                    alert('Name updated successfully!');
+                } else {
+                    alert(data.message || 'Name updated successfully!');
+                }
+            } catch (err) {
+                console.error('Error updating username:', err);
+                alert('An error occurred while updating name. Please check your connection and try again.');
+            }
+        }
+        
+        async function changePassword() {
+            const userId = sessionStorage.getItem('userId') || localStorage.getItem('userId');
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const messageDiv = document.getElementById('password-message');
+            
+            // Clear previous messages
+            messageDiv.textContent = '';
+            messageDiv.style.color = '';
+            
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                messageDiv.textContent = 'Please fill in all fields';
+                messageDiv.style.color = '#f56565';
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                messageDiv.textContent = 'New passwords do not match';
+                messageDiv.style.color = '#f56565';
+                return;
+            }
+            
+            if (newPassword.length < 6) {
+                messageDiv.textContent = 'Password must be at least 6 characters long';
+                messageDiv.style.color = '#f56565';
+                return;
+            }
+            
+            try {
+                const res = await fetch('/api/change-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId, currentPassword, newPassword })
+                });
+                
+                const data = await res.json();
+                
+                if (res.ok) {
+                    messageDiv.textContent = 'Password changed successfully!';
+                    messageDiv.style.color = '#48bb78';
+                    // Clear password fields
+                    document.getElementById('current-password').value = '';
+                    document.getElementById('new-password').value = '';
+                    document.getElementById('confirm-password').value = '';
+                } else {
+                    messageDiv.textContent = data.message || 'Failed to change password';
+                    messageDiv.style.color = '#f56565';
+                }
+            } catch (err) {
+                console.error('Error changing password:', err);
+                messageDiv.textContent = 'An error occurred while changing password';
+                messageDiv.style.color = '#f56565';
+            }
+        }
+        
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                // ONLY clear sessionStorage (tab-specific) - DO NOT touch localStorage
+                // This ensures other tabs remain logged in
+                sessionStorage.clear();
+                
+                // Redirect to login page
+                window.location.href = 'index.html';
+            }
+        }
+        
+        function togglePassword(inputId, toggleId) {
+            const input = document.getElementById(inputId);
+            const toggle = document.getElementById(toggleId);
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                toggle.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                toggle.textContent = '👁️';
+            }
+        }
+        
+        async function removeOwnedPet(petId) {
+            if (!confirm('Are you sure you want to remove this pet? This action cannot be undone.')) {
+                return;
+            }
+            
+            // Note: Removing owned pet would delete the pet entirely, which is a different operation
+            // For now, we'll just show a message that this requires pet deletion
+            alert('To remove a pet you own, please use the pet management feature. This will delete the pet profile.');
+        }
+        
+        async function removeCaretakerPet(petId) {
+            if (!confirm('Are you sure you want to remove yourself as a caregiver for this pet?')) {
+                return;
+            }
+            
+            try {
+                const userId = sessionStorage.getItem('userId') || localStorage.getItem('userId');
+                
+                if (!userId) {
+                    alert('User ID not found. Please log in again.');
+                    return;
+                }
+                
+                // Convert petId to number if it's a string
+                const petIdNum = typeof petId === 'string' ? parseInt(petId, 10) : petId;
+                const userIdNum = typeof userId === 'string' ? parseInt(userId, 10) : userId;
+                
+                if (isNaN(petIdNum) || isNaN(userIdNum)) {
+                    alert('Invalid pet or user ID.');
+                    return;
+                }
+                
+                console.log(`🗑️ Removing caregiver: userId=${userIdNum}, petId=${petIdNum}`);
+                
+                const response = await fetch('/api/caregiver/remove', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: userIdNum, petId: petIdNum })
+                });
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('API error:', response.status, errorText);
+                    let errorData;
+                    try {
+                        errorData = JSON.parse(errorText);
+                    } catch (e) {
+                        errorData = { message: errorText || 'Failed to remove caregiver' };
+                    }
+                    alert(errorData.message || 'Failed to remove caregiver access.');
+                    return;
+                }
+                
+                const data = await response.json();
+                
+                // Always remove from localStorage regardless of database result
+                // (in case caregiver was only in localStorage)
+                const caregiverPetsStr = sessionStorage.getItem('caregiverPets') || localStorage.getItem('caregiverPets') || '[]';
+                const caregiverPets = JSON.parse(caregiverPetsStr).filter(id => {
+                    const idNum = typeof id === 'string' ? parseInt(id, 10) : id;
+                    return idNum !== petIdNum;
+                });
+                const petsStr = JSON.stringify(caregiverPets);
+                sessionStorage.setItem('caregiverPets', petsStr);
+                localStorage.setItem('caregiverPets', petsStr);
+                
+                // Reload lists
+                await loadCaretakerPets(userIdNum);
+                await loadConnectedMembers(userIdNum);
+                
+                alert('Successfully removed yourself as caregiver.');
+            } catch (err) {
+                console.error('Error removing caregiver:', err);
+                console.error('Error details:', err.message, err.stack);
+                
+                // Even on error, try to remove from localStorage
+                try {
+                    const caregiverPetsStr = sessionStorage.getItem('caregiverPets') || localStorage.getItem('caregiverPets') || '[]';
+                    const caregiverPets = JSON.parse(caregiverPetsStr).filter(id => {
+                        const idNum = typeof id === 'string' ? parseInt(id, 10) : id;
+                        const petIdNum = typeof petId === 'string' ? parseInt(petId, 10) : petId;
+                        return idNum !== petIdNum;
+                    });
+                    const petsStr = JSON.stringify(caregiverPets);
+                    sessionStorage.setItem('caregiverPets', petsStr);
+                    localStorage.setItem('caregiverPets', petsStr);
+                } catch (localErr) {
+                    console.error('Error updating localStorage:', localErr);
+                }
+                
+                alert('Removed from local storage. If the error persists, please refresh the page.');
+            }
+        }
+        
+        // Make functions available globally
+        window.logout = logout;
+        window.updateUsername = updateUsername;
+        window.changePassword = changePassword;
+        window.togglePassword = togglePassword;
+        window.addPetCodeFromProfile = addPetCodeFromProfile;
+        window.removeOwnedPet = removeOwnedPet;
+        window.removeCaretakerPet = removeCaretakerPet;
+        
+        // Highlight active page
+        document.querySelectorAll('.nav-right p a').forEach(link => {
+            if (link.href.includes('profile.html')) {
+                link.classList.add('active');
+            }
+        });
+    </script>
+    <script src="show-pet-nav.js"></script>
+    <script src="pet-switcher.js"></script>
+</body>
+</html>
+

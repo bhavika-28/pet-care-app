@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetCare - Pet Information</title>
+    <link rel="stylesheet" href="todo.css">
+</head>
+<body>
+    <div class="bg">
+        <nav class="navbar">
+            <div class="nav-left">
+              <img src="logo.png" alt="PetCare Logo" class="nav-logo">
+              <span class="brand-name">PetCare</span>
+            </div>
+            <span class="nav-right">
+                    <p><a href="dashboard.html">Home</a></p>
+                    <p><a href="todo.html">To-Do</a></p>
+                    <p><a href="appointments.html">Appointments</a></p>
+                    <p><a href="health-records.html">Health-Records</a></p>
+                    <div class="nav-icons-container">
+                        <div class="nav-dropdown">
+                            <div id="pet-icon-nav" class="nav-icon pet-icon active" title="Pet Profile">
+                                <span id="pet-emoji-icon">🐾</span>
+                            </div>
+                            <div class="dropdown-menu pet-dropdown">
+                                <a href="pet-info.html" class="dropdown-item">📋 Pet Info</a>
+                                <div class="dropdown-item pet-code-item" onclick="copyPetCode()">
+                                    <span>🔑 Pet Code: <span id="dropdown-pet-code">Loading...</span></span>
+                                    <small>Click to copy</small>
+                                </div>
+                                <div class="dropdown-item pet-switcher-item-header">
+                                    <span>🐾 Other Pet Profiles</span>
+                                </div>
+                                <div id="pet-switcher-list" class="pet-switcher-list">
+                                    <div class="pet-switcher-loading">Loading pets...</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="nav-dropdown">
+                            <div class="nav-icon user-icon" title="User Profile">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="12" cy="8" r="4" fill="#666"/>
+                                    <path d="M6 20c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="#666" stroke-width="2" fill="none"/>
+                                </svg>
+                            </div>
+                            <div class="dropdown-menu user-dropdown">
+                                <a href="profile.html" class="dropdown-item">👤 User Info</a>
+                                <div class="dropdown-item logout-item" onclick="logout()">🚪 Logout</div>
+                            </div>
+                        </div>
+                    </div>
+            </span>
+          </nav>
+          
+        <main>
+            <div class="health-records-container" style="max-width: 800px;">
+                <h1>Pet Information</h1>
+                
+                <div class="add-record-form">
+                    <h3 class="form-section-title">Pet Details</h3>
+                    <div class="form-divider"></div>
+                    
+                    <div id="pet-code-display" style="padding: 1rem; background: rgba(121, 194, 208, 0.1); border-radius: 8px; margin-bottom: 1.5rem;">
+                        <p style="margin: 0; font-size: 0.9rem; color: #666;"><strong>Pet Code:</strong> <span id="pet-code-value" style="font-family: monospace; font-size: 1.1rem; color: #2d525c; font-weight: 600;"></span></p>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.85rem; color: #666;">Share this code with caretakers to give them access to this pet's profile.</p>
+                    </div>
+                    
+                    <form id="pet-info-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="pet-name-edit">Pet Name *</label>
+                                <input type="text" id="pet-name-edit" placeholder="Pet name" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="pet-type-edit">Type *</label>
+                                <select id="pet-type-edit" required>
+                                    <option value="">Select type</option>
+                                    <option value="Dog">Dog</option>
+                                    <option value="Cat">Cat</option>
+                                    <option value="Rabbit">Rabbit</option>
+                                    <option value="Bird">Bird</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="pet-breed-edit">Breed *</label>
+                                <input type="text" id="pet-breed-edit" placeholder="e.g. Golden Retriever, Persian, etc." required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="pet-emoji-edit">Emoji</label>
+                                <input type="text" id="pet-emoji-edit" placeholder="🐾" maxlength="2">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="pet-age-edit">Pet Age</label>
+                                <input type="number" id="pet-age-edit" placeholder="e.g. 3" min="0" max="30">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="pet-birth-date-edit">Birth Date</label>
+                                <input type="date" id="pet-birth-date-edit">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="pet-gender-edit">Gender</label>
+                                <select id="pet-gender-edit">
+                                    <option value="">Select gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="pet-weight-edit">Weight</label>
+                                <input type="text" id="pet-weight-edit" placeholder="e.g. 100 lbs or 45 kg">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="pet-color-edit">Color</label>
+                            <input type="text" id="pet-color-edit" placeholder="e.g. Brown, Black, White">
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="submit-btn">Save Changes</button>
+                            <button type="button" class="clear-btn" onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const petId = localStorage.getItem('selectedPetId');
+            const form = document.getElementById('pet-info-form');
+            
+            if (!petId) {
+                alert('No pet selected. Redirecting to pet profiles...');
+                window.location.href = 'pet-profile.html';
+                return;
+            }
+            
+            // Load pet info
+            loadPetInfo(petId);
+            
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const name = document.getElementById('pet-name-edit').value.trim();
+                const type = document.getElementById('pet-type-edit').value;
+                const breed = document.getElementById('pet-breed-edit').value.trim();
+                const emoji = document.getElementById('pet-emoji-edit').value.trim();
+                const age = document.getElementById('pet-age-edit').value;
+                const birthDate = document.getElementById('pet-birth-date-edit').value;
+                const gender = document.getElementById('pet-gender-edit').value;
+                const weight = document.getElementById('pet-weight-edit').value.trim();
+                const color = document.getElementById('pet-color-edit').value.trim();
+                
+                if (!name || !type || !breed) {
+                    alert('Please fill in required fields (Name, Type, and Breed).');
+                    return;
+                }
+                
+                try {
+                    // Update pet info
+                    const updateRes = await fetch(`/api/pets/${petId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            name: name,
+                            type: type,
+                            breed: breed,
+                            emoji: emoji || null,
+                            age: age ? parseInt(age) : null,
+                            birth_date: birthDate || null,
+                            gender: gender || null,
+                            weight: weight || null,
+                            color: color || null
+                        })
+                    });
+                    
+                    const updateData = await updateRes.json();
+                    if (updateData.success) {
+                        // Update localStorage
+                        const selectedPet = JSON.parse(localStorage.getItem('selectedPet') || '{}');
+                        selectedPet.name = name;
+                        selectedPet.type = type;
+                        selectedPet.breed = breed;
+                        selectedPet.emoji = emoji;
+                        localStorage.setItem('selectedPet', JSON.stringify(selectedPet));
+                        
+                        alert('Pet information updated successfully!');
+                        // Reload to show updated info
+                        loadPetInfo(petId);
+                    } else {
+                        alert('Failed to update pet information: ' + (updateData.message || 'Unknown error'));
+                    }
+                } catch (err) {
+                    console.error('Error updating pet:', err);
+                    alert('Failed to update pet information. Please try again.');
+                }
+            });
+        });
+        
+        async function loadPetInfo(petId) {
+            try {
+                const res = await fetch(`/api/pets/${petId}`);
+                const data = await res.json();
+                if (data.success && data.pet) {
+                    const pet = data.pet;
+                    
+                    // Display pet code
+                    if (pet.pet_code) {
+                        document.getElementById('pet-code-value').textContent = pet.pet_code;
+                    } else {
+                        document.getElementById('pet-code-value').textContent = 'Not available';
+                    }
+                    
+                    // Fill form fields
+                    if (pet.name) document.getElementById('pet-name-edit').value = pet.name;
+                    if (pet.type) document.getElementById('pet-type-edit').value = pet.type;
+                    if (pet.breed) document.getElementById('pet-breed-edit').value = pet.breed;
+                    if (pet.emoji) document.getElementById('pet-emoji-edit').value = pet.emoji;
+                    if (pet.age) document.getElementById('pet-age-edit').value = pet.age;
+                    if (pet.birth_date) {
+                        // Format date for input (YYYY-MM-DD)
+                        const date = new Date(pet.birth_date);
+                        if (!isNaN(date.getTime())) {
+                            document.getElementById('pet-birth-date-edit').value = date.toISOString().split('T')[0];
+                        }
+                    }
+                    if (pet.gender) document.getElementById('pet-gender-edit').value = pet.gender;
+                    if (pet.weight) document.getElementById('pet-weight-edit').value = pet.weight;
+                    if (pet.color) document.getElementById('pet-color-edit').value = pet.color;
+                }
+            } catch (err) {
+                console.error('Error loading pet info:', err);
+                alert('Error loading pet information. Please try again.');
+            }
+        }
+    </script>
+    <script src="session-utils.js"></script>
+    <script src="storage-utils.js"></script>
+    <script src="show-pet-nav.js"></script>
+    <script src="pet-switcher.js"></script>
+</body>
+</html>
+

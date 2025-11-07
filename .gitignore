@@ -1,0 +1,55 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+backend/pet_care.db
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Uploads (user-uploaded files)
+backend/uploads/*
+!backend/uploads/.gitkeep
+public/uploads/*
+!public/uploads/.gitkeep
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build files
+dist/
+build/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Windows batch files (optional - you might want to keep these)
+# *.bat
+
+# Keep upload directories but ignore contents
+!backend/uploads/
+!public/uploads/

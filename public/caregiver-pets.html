@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Care Pets</title>
+  <link rel="stylesheet" href="pet-profile.css">
+  <style>
+    .caregiver-pets-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 2rem;
+    }
+    .pets-list {
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0;
+    }
+    .pet-list-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .pet-list-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    .pet-icon {
+      font-size: 2.5rem;
+    }
+    .pet-info {
+      flex: 1;
+    }
+    .pet-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 0.25rem;
+    }
+    .pet-details {
+      font-size: 0.9rem;
+      color: #666;
+    }
+    .add-pet-code-btn {
+      margin-top: 1.5rem;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, #5baec5 0%, #4e7cf5 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .add-pet-code-btn:hover {
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="caregiver-pets-container">
+    <h1 style="text-align: center; margin-bottom: 2rem;">Pets I Care For</h1>
+    
+    <ul id="petsList" class="pets-list">
+      <li class="empty-state">Loading pets...</li>
+    </ul>
+    
+    <div style="text-align: center;">
+      <button class="add-pet-code-btn" onclick="addPetCode()">+ Add Another Pet Code</button>
+    </div>
+  </div>
+
+  <script>
+    // Get userId from sessionStorage (tab-specific) first, then localStorage
+    const userId = sessionStorage.getItem('userId') || localStorage.getItem('userId');
+    
+    // Helper to get value from sessionStorage first, then localStorage
+    const getValue = (key) => {
+      const sessionVal = sessionStorage.getItem(key);
+      return sessionVal !== null ? sessionVal : localStorage.getItem(key);
+    };
+    
+    // Helper to set value in both storages
+    const setValue = (key, value) => {
+      sessionStorage.setItem(key, value);
+      localStorage.setItem(key, value);
+    };
+    
+    // Load caregiver pets from storage and backend
+    async function loadCaregiverPets() {
+      const petsList = document.getElementById('petsList');
+      petsList.innerHTML = '<li class="empty-state">Loading pets...</li>';
+      
+      const allPets = [];
+      const allPetIds = new Set();
+      
+      // 1. Get pets from backend (pets they're officially caregivers for)
+      try {
+        const backendRes = await fetch(`/api/pets/caretaker?userId=${userId}`);
+        const backendData = await backendRes.json();
+        
+        if (backendData.success && backendData.pets && backendData.pets.length > 0) {
+          backendData.pets.forEach(pet => {
+            if (!allPetIds.has(pet.id)) {
+              allPetIds.add(pet.id);
+              allPets.push(pet);
+            }
+          });
+        }
+      } catch (err) {
+        console.error('Error fetching backend pets:', err);
+      }
+      
+      // 2. Get pets from localStorage/sessionStorage (pets added via pet codes)
+      const caregiverPets = JSON.parse(getValue('caregiverPets') || '[]');
+      
+      if (caregiverPets.length > 0) {
+        const storagePets = await Promise.all(
+          caregiverPets.map(petId => 
+            fetch(`/api/pets/${petId}`)
+              .then(res => res.json())
+              .then(data => data.success ? data.pet : null)
+              .catch(err => {
+                console.error(`Error fetching pet ${petId}:`, err);
+                return null;
+              })
+          )
+        );
+        
+        storagePets.forEach(pet => {
+          if (pet && !allPetIds.has(pet.id)) {
+            allPetIds.add(pet.id);
+            allPets.push(pet);
+          }
+        });
+      }
+      
+      // Display pets
+      if (allPets.length === 0) {
+        petsList.innerHTML = '<li class="empty-state">No pets yet. Click "Add Another Pet Code" to get started.</li>';
+        return;
+      }
+      
+      petsList.innerHTML = '';
+      
+      allPets.forEach(pet => {
+        const listItem = document.createElement('li');
+        listItem.className = 'pet-list-item';
+        listItem.innerHTML = `
+          <div class="pet-icon">${pet.emoji || '🐾'}</div>
+          <div class="pet-info">
+            <div class="pet-name">${pet.name}</div>
+            <div class="pet-details">${pet.type || 'Unknown'}${pet.age !== null && pet.age !== undefined ? ' • Age: ' + pet.age + ' years' : ''}${pet.breed ? ' • ' + pet.breed : ''}</div>
+          </div>
+        `;
+        
+        listItem.addEventListener('click', () => {
+          const petStr = JSON.stringify(pet);
+          setValue('selectedPet', petStr);
+          setValue('selectedPetId', pet.id);
+          setValue('accessMode', 'caregiver');
+          window.location.href = 'dashboard.html';
+        });
+        
+        petsList.appendChild(listItem);
+      });
+    }
+    
+    async function addPetCode() {
+      const enteredPetCode = prompt("Please enter the pet code to access the pet's profile:");
+      
+      if (!enteredPetCode || !enteredPetCode.trim()) {
+        return;
+      }
+      
+      try {
+        const response = await fetch(`/api/pets/code/${enteredPetCode.trim().toUpperCase()}`);
+        const data = await response.json();
+        
+        if (data.success && data.pet) {
+          const userId = sessionStorage.getItem('userId') || localStorage.getItem('userId');
+          
+          // Get existing caregiver pets
+          const caregiverPets = JSON.parse(getValue('caregiverPets') || '[]');
+          
+          // Check if pet is already in the list
+          if (caregiverPets.includes(data.pet.id)) {
+            alert(`You already have access to ${data.pet.name}.`);
+            await loadCaregiverPets(); // Refresh the list
+            return;
+          }
+          
+          // Add caregiver to database
+          const addResponse = await fetch('/api/caregiver/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId, petId: data.pet.id })
+          });
+          
+          const addData = await addResponse.json();
+          
+          if (!addData.success) {
+            alert(addData.message || 'Failed to add caregiver access.');
+            return;
+          }
+          
+          // Add pet to list
+          caregiverPets.push(data.pet.id);
+          setValue('caregiverPets', JSON.stringify(caregiverPets));
+          
+          alert(`Access granted! You can now view ${data.pet.name}'s profile.`);
+          // Reload the list
+          await loadCaregiverPets();
+        } else {
+          alert(data.message || 'Invalid pet code. Please check and try again.');
+        }
+      } catch (err) {
+        console.error("Fetch error:", err);
+        alert('Error: Could not verify pet code. Please try again.');
+      }
+    }
+    
+    // Make addPetCode globally available
+    window.addPetCode = addPetCode;
+    
+    // Load pets on page load
+    if (userId) {
+      loadCaregiverPets();
+    } else {
+      alert('Please log in first.');
+      window.location.href = '/';
+    }
+  </script>
+</body>
+</html>
+

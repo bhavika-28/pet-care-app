@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetCare - Appointments</title>
+    <link rel="stylesheet" href="todo.css">
+</head>
+<body >
+    <div class="bg">
+        <nav class="navbar">
+            <div class="nav-left">
+              <img src="logo.png" alt="PetCare Logo" class="nav-logo">
+              <span class="brand-name">PetCare</span>
+            </div>
+            <span class="nav-right">
+                    <p><a href="dashboard.html">Home</a></p>
+                    <p><a href="todo.html">To-Do</a></p>
+                    <p><a href="appointments.html">Appointments</a></p>
+                    <p><a href="health-records.html">Health-Records</a></p>
+                    <div class="nav-icons-container">
+                        <div class="nav-dropdown">
+                            <div id="pet-icon-nav" class="nav-icon pet-icon" title="Pet Profile">
+                                <span id="pet-emoji-icon">🐾</span>
+                            </div>
+                            <div class="dropdown-menu pet-dropdown">
+                                <a href="pet-info.html" class="dropdown-item">📋 Pet Info</a>
+                                <div class="dropdown-item pet-code-item" onclick="copyPetCode()">
+                                    <span>🔑 Pet Code: <span id="dropdown-pet-code">Loading...</span></span>
+                                    <small>Click to copy</small>
+                                </div>
+                                <div class="dropdown-item pet-switcher-item-header">
+                                <span>🐾 Other Pet Profiles</span>
+                            </div>
+                            <div id="pet-switcher-list" class="pet-switcher-list">
+                                <div class="pet-switcher-loading">Loading pets...</div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="nav-dropdown">
+                            <div class="nav-icon user-icon" title="User Profile">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="12" cy="8" r="4" fill="#666"/>
+                                    <path d="M6 20c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="#666" stroke-width="2" fill="none"/>
+                                </svg>
+                            </div>
+                        <div class="dropdown-menu user-dropdown">
+                            <a href="profile.html" class="dropdown-item">👤 User Info</a>
+                            <div class="dropdown-item logout-item" onclick="logout()">🚪 Logout</div>
+                        </div>
+                        </div>
+                    </div>
+            </span>
+          </nav>
+        <main >
+            <div class="appointments-container">
+                <h2 id="add">Upcoming Appointments</h2>
+                
+                <div class="add-appointment">
+                    <select id="appointment-type">
+                        <option value="">Select appointment type</option>
+                        <option value="Vet Visit">Vet Visit</option>
+                        <option value="Vaccination">Vaccination</option>
+                        <option value="Grooming">Grooming</option>
+                        <option value="Dental">Dental Checkup</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    
+                    <input type="text" id="appointment-details" placeholder="Details (e.g. 'Annual checkup')">
+                    
+                    <input type="datetime-local" id="appointment-date">
+                    
+                    <button id="add-appointment-btn">Add Appointment</button>
+                </div>
+                
+                <ul id="appointments-list">
+                    <!-- Appointments will be loaded here -->
+                </ul>
+            </div>
+        </main>
+    </div>
+    
+    <script src="session-utils.js"></script>
+    <script src="storage-utils.js"></script>
+    <script src="appointments.js"></script>
+    <script src="show-pet-nav.js"></script>
+    <script src="pet-switcher.js"></script>
+    <script>
+        // Highlight active page in navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPage = window.location.pathname.split('/').pop() || 'appointments.html';
+            const navLinks = document.querySelectorAll('.nav-right p a');
+            navLinks.forEach(link => {
+                const linkPage = link.getAttribute('href');
+                if (linkPage === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

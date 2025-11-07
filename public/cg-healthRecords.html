@@ -1,0 +1,51 @@
+<!-- public/cg-health-records.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Caregiver - Health Records</title>
+  <link rel="stylesheet" href="todo.css" />
+
+  <style>
+    .record-item {
+  padding: 12px 0;
+  border-bottom: 2px dotted white; 
+ 
+}
+
+.record-item:last-child {
+  border-bottom: none; /* Remove line after the last record */
+}
+
+  </style>
+  </head>
+  
+<body>
+  <div class="bg">
+    <nav class="navbar">
+      <div class="nav-left">
+        <img src="logo.png" alt="PetCare Logo" class="nav-logo">
+        <span class="brand-name">PetCare</span>
+      </div>
+      <span class="nav-right">
+        <p><a href="caregiver-dashboard.html">Home</a></p>
+        <p><a href="allPets.html">Pets</a></p>
+        <p><a href="#">Health Records</a></p>
+      </span>
+    </nav>
+
+    <main>
+      <div class="health-records-container">
+        <h1 id="pet-name-header">Health Records</h1>
+        <div class="records-section">
+          <div class="records-list" id="records-list">
+            <!-- Health records will appear here -->
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="cg-healthRecords.js"></script>
+</body>
+</html>

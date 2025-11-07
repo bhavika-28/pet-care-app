@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetCare - Health Records</title>
+    <link rel="stylesheet" href="todo.css">
+</head>
+<body>
+    <div class="bg">
+        <nav class="navbar">
+            <div class="nav-left">
+              <img src="logo.png" alt="PetCare Logo" class="nav-logo">
+              <span class="brand-name">PetCare</span>
+            </div>
+            <span class="nav-right">
+                    <p><a href="dashboard.html">Home</a></p>
+                    <p><a href="todo.html">To-Do</a></p>
+                    <p><a href="appointments.html">Appointments</a></p>
+                    <p><a href="health-records.html">Health-Records</a></p>
+                    <div class="nav-icons-container">
+                        <div class="nav-dropdown">
+                            <div id="pet-icon-nav" class="nav-icon pet-icon" title="Pet Profile">
+                                <span id="pet-emoji-icon">🐾</span>
+                            </div>
+                            <div class="dropdown-menu pet-dropdown">
+                                <a href="pet-info.html" class="dropdown-item">📋 Pet Info</a>
+                                <div class="dropdown-item pet-code-item" onclick="copyPetCode()">
+                                    <span>🔑 Pet Code: <span id="dropdown-pet-code">Loading...</span></span>
+                                    <small>Click to copy</small>
+                                </div>
+                                <div class="dropdown-item pet-switcher-item-header">
+                                    <span>🐾 Other Pet Profiles</span>
+                                </div>
+                                <div id="pet-switcher-list" class="pet-switcher-list">
+                                    <div class="pet-switcher-loading">Loading pets...</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="nav-dropdown">
+                            <div class="nav-icon user-icon" title="User Profile">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="12" cy="8" r="4" fill="#666"/>
+                                    <path d="M6 20c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="#666" stroke-width="2" fill="none"/>
+                                </svg>
+                            </div>
+                            <div class="dropdown-menu user-dropdown">
+                                <a href="profile.html" class="dropdown-item">👤 User Info</a>
+                                <div class="dropdown-item logout-item" onclick="logout()">🚪 Logout</div>
+                            </div>
+                        </div>
+                    </div>
+            </span>
+          </nav>
+          
+        
+        <main>
+            <div class="health-records-container">
+                <h1 id="pet-name-header">Health Records</h1>
+                <script>
+                    // Update header with pet name if available
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const petId = localStorage.getItem('selectedPetId');
+                        const selectedPet = JSON.parse(localStorage.getItem('selectedPet') || 'null');
+                        const header = document.getElementById('pet-name-header');
+                        
+                        if (selectedPet && selectedPet.name) {
+                            header.textContent = `${selectedPet.name}'s Health Records`;
+                        } else if (petId) {
+                            fetch(`/api/pets/${petId}`)
+                                .then(res => res.json())
+                                .then(data => {
+                                    if (data.success && data.pet && data.pet.name) {
+                                        header.textContent = `${data.pet.name}'s Health Records`;
+                                    }
+                                })
+                                .catch(err => console.error('Error loading pet name:', err));
+                        }
+                    });
+                </script>
+                
+                <div class="add-record-form">
+                    <h3 class="form-section-title">Add New Medical Record</h3>
+                    <div class="form-divider"></div>
+                    
+                    <form id="health-record-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="record-type">Record Type *</label>
+                                <select id="record-type" required>
+                                    <option value="">Select record type</option>
+                                    <option value="Vaccination">Vaccination</option>
+                                    <option value="Medication">Medication</option>
+                                    <option value="Vet Visit">Vet Visit</option>
+                                    <option value="Allergy">Allergy</option>
+                                    <option value="Test Result">Test Result</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="record-name">Record Name *</label>
+                                <input type="text" id="record-name" placeholder="e.g. 'Rabies Vaccine'" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="record-date">Date *</label>
+                                <input type="date" id="record-date" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="record-vet">Veterinarian / Clinic</label>
+                                <input type="text" id="record-vet" placeholder="e.g. 'Pet Care Clinic'">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="record-notes">Description / Notes</label>
+                            <textarea id="record-notes" placeholder="Enter any additional details, symptoms, or notes about this record..." rows="4"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Document Upload (Optional)</label>
+                            <div class="file-upload-section">
+                                <label for="record-file" class="file-upload-label">
+                                    <span class="upload-icon">📎</span>
+                                    <span class="upload-text">Upload Document</span>
+                                    <span class="upload-hint">Bill, Prescription, or Medical Document (PDF, Images, Max 10MB)</span>
+                                </label>
+                                <input type="file" id="record-file" name="file" accept=".pdf,.jpg,.jpeg,.png,.gif,.doc,.docx" style="display: none;">
+                                <div id="file-name-display" class="file-name-display" style="display: none;"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="submit-btn">Add Health Record</button>
+                            <button type="reset" class="clear-btn">Clear Form</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="records-section">
+                    <div class="section-header">
+                        <h2>Medical History</h2>
+                        <div class="pdf-controls">
+                            <button id="pdf-preview-btn" class="pdf-btn">PDF PREVIEW</button>
+                            <button id="pdf-download-btn" class="pdf-btn primary">DOWNLOAD PDF</button>
+                        </div>
+                    </div>
+                    
+                    <div class="vaccine-section">
+                        <h3 class="vaccine-title">Immunization History</h3>
+                        <div id="vaccine-table-container">
+                            <div class="vaccine-table-loading">Loading vaccine schedule...</div>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-controls">
+                        <select id="filter-type">
+                            <option value="all">All Record Types</option>
+                            <option value="Vaccination">Vaccinations</option>
+                            <option value="Medication">Medications</option>
+                            <option value="Vet Visit">Vet Visits</option>
+                        </select>
+                        <input type="text" id="search-records" placeholder="Search records...">
+                    </div>
+                    
+                    <div class="records-list" id="records-list">
+                        <!-- Records will be loaded here -->
+                    </div>
+                    
+                    <!-- PDF Preview Section -->
+                    <div id="pdf-preview-section" style="display: none; margin-top: 2rem;">
+                        <div class="section-header">
+                            <h3 style="margin: 0; color: #2d525c; font-size: 1.2rem;">PDF Preview</h3>
+                            <button id="pdf-close-inline-btn" class="pdf-btn" style="font-size: 0.7rem; padding: 0.3rem 0.6rem;">Close Preview</button>
+                        </div>
+                        <div id="pdf-content-container" style="max-height: 600px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1rem; background: white; margin-top: 1rem;">
+                            <div id="pdf-content" class="pdf-content-inline">
+                                <!-- PDF content will be rendered here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="healthRecords.js"></script>
+    <script src="session-utils.js"></script>
+    <script src="storage-utils.js"></script>
+    <script src="show-pet-nav.js"></script>
+    <script src="pet-switcher.js"></script>
+    <script>
+        // Highlight active page in navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPage = window.location.pathname.split('/').pop() || 'health-records.html';
+            const navLinks = document.querySelectorAll('.nav-right p a');
+            navLinks.forEach(link => {
+                const linkPage = link.getAttribute('href');
+                if (linkPage === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

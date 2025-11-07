@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetCare - Pet Details</title>
+    <link rel="stylesheet" href="todo.css">
+</head>
+<body>
+    <div class="bg">
+        <nav class="navbar">
+            <div class="nav-left">
+              <img src="logo.png" alt="PetCare Logo" class="nav-logo">
+              <span class="brand-name">PetCare</span>
+            </div>
+            <span class="nav-right">
+                    <p><a href="dashboard.html">Home</a></p>
+                    <p><a href="pet-profile.html">Pet Profiles</a></p>
+            </span>
+          </nav>
+          
+        <main>
+            <div class="health-records-container" style="max-width: 800px;">
+                <h1>Complete Pet Information</h1>
+                
+                <div class="add-record-form">
+                    <h3 class="form-section-title">Pet Details</h3>
+                    <div class="form-divider"></div>
+                    
+                    <form id="pet-details-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="pet-age">Pet Age *</label>
+                                <input type="number" id="pet-age" placeholder="e.g. 3" min="0" max="30" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="pet-birth-date">Birth Date</label>
+                                <input type="date" id="pet-birth-date">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="pet-gender">Gender</label>
+                                <select id="pet-gender">
+                                    <option value="">Select gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="pet-weight">Weight</label>
+                                <input type="text" id="pet-weight" placeholder="e.g. 100 lbs or 45 kg">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="pet-color">Color</label>
+                            <input type="text" id="pet-color" placeholder="e.g. Brown, Black, White">
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="submit-btn">Save Pet Details</button>
+                            <button type="button" class="clear-btn" onclick="window.location.href='dashboard.html'">Skip for Now</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const petId = localStorage.getItem('newPetId') || localStorage.getItem('selectedPetId');
+            const form = document.getElementById('pet-details-form');
+            
+            if (!petId) {
+                alert('No pet selected. Redirecting to pet profiles...');
+                window.location.href = 'pet-profile.html';
+                return;
+            }
+            
+            // Load existing pet info if available
+            loadPetInfo(petId);
+            
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const age = document.getElementById('pet-age').value;
+                const birthDate = document.getElementById('pet-birth-date').value;
+                const gender = document.getElementById('pet-gender').value;
+                const weight = document.getElementById('pet-weight').value.trim();
+                const color = document.getElementById('pet-color').value.trim();
+                
+                try {
+                    const res = await fetch(`/api/pets/${petId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            age: age ? parseInt(age) : null,
+                            birth_date: birthDate || null,
+                            gender: gender || null,
+                            weight: weight || null,
+                            color: color || null
+                        })
+                    });
+                    
+                    const data = await res.json();
+                    if (data.success) {
+                        alert('Pet details saved successfully!');
+                        localStorage.removeItem('newPetId');
+                        window.location.href = 'dashboard.html';
+                    } else {
+                        alert('Failed to save pet details: ' + (data.message || 'Unknown error'));
+                    }
+                } catch (err) {
+                    console.error('Error saving pet details:', err);
+                    alert('Failed to save pet details. Please try again.');
+                }
+            });
+        });
+        
+        async function loadPetInfo(petId) {
+            try {
+                const res = await fetch(`/api/pets/${petId}`);
+                const data = await res.json();
+                if (data.success && data.pet) {
+                    const pet = data.pet;
+                    if (pet.age) document.getElementById('pet-age').value = pet.age;
+                    if (pet.birth_date) document.getElementById('pet-birth-date').value = pet.birth_date;
+                    if (pet.gender) document.getElementById('pet-gender').value = pet.gender;
+                    if (pet.weight) document.getElementById('pet-weight').value = pet.weight;
+                    if (pet.color) document.getElementById('pet-color').value = pet.color;
+                }
+            } catch (err) {
+                console.error('Error loading pet info:', err);
+            }
+        }
+    </script>
+</body>
+</html>
+

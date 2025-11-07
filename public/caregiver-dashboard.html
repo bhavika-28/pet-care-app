@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="dashboard.css">
+    <title>Pet Dashboard</title>
+</head>
+<style>
+  
+
+
+</style>
+<body>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-container">
+        <h1 id="dashboardTitle">Dashboard</h1>
+
+        <div class="dashboard">
+            <div class="card todo" onclick="navigateTo('caregiver-todoList.html')">
+                <h2>✅ To-Do List</h2>
+                <p>Manage daily pet care tasks and reminders.</p>
+            </div>
+            <div class="card appointments" onclick="navigateTo('cg-appointments.html')">
+                <h2>📅 Appointments</h2>
+                <p>Track vet visits, grooming sessions, and more.</p>
+            </div>
+            <div class="card health" onclick="navigateTo('cg-healthRecords.html')">
+                <h2>🏥 Health Records</h2>
+                <p>Maintain vaccination records, medical history, and health updates.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="caregiver-dashboard.js"></script>
+</body>
+</html>

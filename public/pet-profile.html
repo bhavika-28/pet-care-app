@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Select Your Pet</title>
+  <link rel="stylesheet" href="pet-profile.css">
+</head>
+<body>
+
+<div class="selection-container">
+  <h1>Who's your pet?</h1>
+
+  <div id="petProfiles" class="pet-profiles">
+    <!-- Pet profiles will appear here -->
+    
+    <!-- Add Pet Card -->
+    <div class="add-pet" id="addPetCard">
+      <div class="plus">+</div>
+      <div>Add Pet</div>
+    </div>
+  </div>
+
+  <button id="manageProfilesBtn">Manage Profiles</button>
+</div>
+
+<!-- Modal to Add New Pet -->
+<div id="addPetModal" class="modal">
+  <div class="modal-content">
+    <span class="closeBtn">&times;</span>
+    <h2>Add New Pet</h2>
+    <input type="text" id="petNameInput" placeholder="Pet Name" required>
+    <select id="petTypeSelect" required>
+      <option value="">Select Animal Type</option>
+      <option value="Dog">🐶 Dog</option>
+      <option value="Cat">🐱 Cat</option>
+      <option value="Rabbit">🐰 Rabbit</option>
+      <option value="Bird">🦜 Bird</option>
+    </select>
+    <input type="text" id="petBreedInput" placeholder="Breed (e.g. Golden Retriever, Persian, etc.)" required>
+    <button id="savePetBtn">Save Pet</button>
+  </div>
+</div>
+
+<!-- Modal to Manage Pets -->
+<div id="managePetModal" class="modal">
+  <div class="modal-content">
+    <span class="closeBtn">&times;</span>
+    <h2>Manage Pet Profiles</h2>
+    <div id="petProfilesList"></div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,230 @@
+/* General Styles */
+body {
+  background: #e0f7fa; /* Light blue background */
+  font-family: 'Poppins', sans-serif;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Main container */
+.selection-container {
+  background: #ffffff;
+  padding: 50px;  /* Reduced padding to make the container more compact */
+  margin: 10px;
+  border-radius: 20px;
+  box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 100%;
+  max-width: 1100px;
+  box-sizing: border-box;
+}
+
+/* Title */
+h1 {
+  margin-bottom: 30px;
+  color: #2c3e50;
+  font-size: 34px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Pet Profiles Container */
+.pet-profiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 30px;
+  margin-top: 30px;
+  justify-items: center;
+}
+
+/* Pet Profile & Add Pet Card */
+.pet-profile, .add-pet {
+  width: 150px;
+  height: 180px;
+  border-radius: 15px;
+  background: #ffffff;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  cursor: pointer;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.pet-profile:hover, .add-pet:hover {
+  background: #bde3f2;
+  transform: translateY(-10px);
+  box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Pet icon styling */
+.pet-profile img {
+  width: 90px;
+  height: 90px;
+  margin-bottom: 10px;
+  object-fit: cover;
+}
+
+/* Add Pet Card Styling */
+.add-pet {
+  border: 2px dashed #4db6ac;
+  color: #4db6ac;
+  font-size: 22px;
+}
+
+.plus {
+  font-size: 36px;
+}
+
+/* Manage Profiles Button */
+#manageProfilesBtn {
+  margin-top: 30px;
+  padding: 12px 25px;
+  background: #4db6ac;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.1);
+}
+
+#manageProfilesBtn:hover {
+  background: #388e8e;
+}
+
+/* Modal Styling */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6); /* Dark background */
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal Content */
+.modal-content {
+  background: #ffffff;
+  padding: 25px 30px;  /* Reduced padding for a more compact modal */
+  border-radius: 15px;
+  width: 380px;  /* Adjusted width for a more compact look */
+  text-align: center;
+  box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.1);
+  position: relative;
+  max-width: 90%;  /* Ensure it's responsive on smaller screens */
+  height: auto;
+  max-height: 500px; /* Limit height */
+  overflow-y: auto; /* Allow scrolling if content exceeds max height */
+}
+
+/* Modal Title */
+.modal-content h2 {
+  color: #2c3e50;
+  font-size: 26px;
+  margin-bottom: 25px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Close Button */
+.closeBtn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 26px;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.closeBtn:hover {
+  color: #2c3e50;
+}
+
+/* Pet list inside modal */
+.pet-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Single pet item */
+.pet-item {
+  background: #f4f4f4;
+  padding: 12px 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
+  transition: background 0.3s;
+}
+
+.pet-item:hover {
+  background: #e0f7fa;
+}
+
+/* Pet info */
+.pet-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+/* Pet icon */
+.pet-info img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Delete Button */
+.delete-btn {
+  background: #ff6b6b;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.delete-btn:hover {
+  background: #e25555;
+}
+
+/* Inputs inside modal (if any forms are added later) */
+.modal-content input, .modal-content select {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+/* Inputs focus effect */
+.modal-content input:focus, .modal-content select:focus {
+  border-color: #4db6ac;
+  outline: none;
+}
